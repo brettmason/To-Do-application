@@ -1,0 +1,77 @@
+﻿@model ToDoMVC.Models.TodosViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>
+    Index
+    @if (Model.Todos != null)
+    {
+        <span class="badge">@Model.Todos.Count</span>
+    }
+</h2>
+<span>Complete: <span class="badge">@Model.Completed</span></span>
+<span>Todo: <span class="badge">@Model.NotCompleted</span></span>
+<div>
+    @using (Html.BeginForm("Index", "Todo", FormMethod.Get))
+    {
+        @Html.DropDownListFor(s => s.SelectedItem, Model.Filters)
+        @Html.DropDownListFor(s => s.DueDate, Model.DueDateFilters)
+        @Html.DropDownListFor(s => s.OrderOption, Model.OrderOptions)
+        <button type="submit" class="btn btn-default">Go</button>
+    }
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Complete
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Due Date
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Todos != null)
+            {
+                foreach (var todo in Model.Todos)
+                {
+                    <tr>
+                        <td>@todo.Title</td>
+                        <td>@todo.Description</td>
+                        <td>
+                            @if (todo.Complete == true){
+                                <span>Complete</span>
+                            }
+                            else
+                            {
+                                <span>Todo</span>
+                            }
+                        </td>
+                        <td>@todo.Created.ToString("ddd MMM dd, yyyy HH:mm") </td>
+                        <td>@todo.DueDate.ToString("ddd MMM dd, yyyy HH:mm") </td>
+                        <td>@todo.Priority</td>
+                        <td>@Html.ActionLink("Edit", "Edit", new { id = @todo.Id }) | @Html.ActionLink("Delete", "Delete", new { id = @todo.Id }) | @Html.ActionLink("Details", "Details", new { id = @todo.Id })</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
